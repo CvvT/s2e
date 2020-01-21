@@ -138,6 +138,27 @@ add_library(
     s2e/Plugins/Lua/LuaExpression.cpp
     s2e/Plugins/Lua/LuaCoreEvents.cpp
 
+    # KOOBE
+    s2e/Plugins/Profile/Tracer.cpp
+    s2e/Plugins/Profile/loopGuard.cpp
+    s2e/Plugins/Profile/KernelInstructionTracer.cpp
+    s2e/Plugins/Profile/Disassembler.cpp
+    s2e/Plugins/Profile/InstructionModels.cpp
+    s2e/Plugins/Profile/PcMonitor.cpp
+    s2e/Plugins/Profile/PcMonitor.cpp
+    s2e/Plugins/Profile/AllocationMap.cpp
+    s2e/Plugins/Profile/Evaluation.cpp
+    s2e/Plugins/Profile/KernelFunctionModels.cpp
+    s2e/Plugins/Profile/ProgramMonitor.cpp
+    s2e/Plugins/Profile/util.cpp
+    s2e/Plugins/Profile/Kasan.cpp
+    s2e/Plugins/Profile/Options.cpp
+    s2e/Plugins/Profile/LuaKernel.cpp
+    s2e/Plugins/Profile/ObjectAnalyzer.cpp
+    s2e/Plugins/Profile/Instrumentor.cpp
+    s2e/Plugins/Profile/LuaInterface.cpp
+    s2e/Plugins/Profile/Serialize.cpp
+
     ${PROTO_SRCS} ${PROTO_HDRS}
 )
 

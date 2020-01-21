@@ -376,6 +376,13 @@ public:
         onStateForkDecide;
 
 
+    sigc::signal<void,
+                 S2EExecutionState *,
+                 klee::ref<klee::Expr>,
+                 bool* /* allow add new constraints */>
+    onConstraint;
+
+
     ///
     /// Signal emitted when spawning a new S2E process.
     ///

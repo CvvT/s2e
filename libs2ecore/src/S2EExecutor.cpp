@@ -1432,9 +1432,9 @@ S2EExecutor::StatePair S2EExecutor::fork(ExecutionState &current, const klee::re
         }
 
         g_s2e->getCorePlugin()->onStateForkDecide.emit(currentState, &forkOk);
-        if (!forkOk) {
-            g_s2e->getDebugStream(currentState) << "fork prevented by request from plugin\n";
-        }
+        // if (!forkOk) {
+        //     g_s2e->getDebugStream(currentState) << "fork prevented by request from plugin\n";
+        // }
     }
 
     bool oldForkStatus = currentState->forkDisabled;
