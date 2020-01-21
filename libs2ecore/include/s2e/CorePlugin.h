@@ -375,6 +375,11 @@ public:
                  bool* /* allow forking */>
         onStateForkDecide;
 
+    sigc::signal<void,
+                 S2EExecutionState *,
+                 klee::ref<klee::Expr>,
+                 bool*>
+        onStateForkDecideWithCond;
 
     ///
     /// Signal emitted when spawning a new S2E process.
