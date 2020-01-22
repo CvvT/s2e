@@ -459,14 +459,14 @@ private:
     void updateIdleStatus();
 
     void backupSeed(const std::string &seedFilePath);
-    void fetchNewSeeds();
-    bool scheduleNextSeed();
     void onTimer();
     void handleGetSeedFile(S2EExecutionState *state, S2E_SEEDSEARCHER_COMMAND &cmd);
 
     void handleOpcodeInvocation(S2EExecutionState *state, uint64_t guestDataPtr, uint64_t guestDataSize);
 
 public:
+    void fetchNewSeeds();
+    bool scheduleNextSeed();
     ///
     /// \brief enableSeeds controls whether the searcher schedules seeds
     ///
