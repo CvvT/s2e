@@ -274,6 +274,8 @@ bool Z3BaseSolverImpl::computeInitialValues(const Query &query, const ArrayVec &
     }
 }
 
+const unsigned kSolverTimeout = 10000; // 10 seconds
+
 void Z3BaseSolverImpl::configureSolver() {
     (*klee_message_stream) << "[Z3] Initializing\n";
 
@@ -282,6 +284,7 @@ void Z3BaseSolverImpl::configureSolver() {
 
     z3::params params(context_);
     params.set("array.extensional", false);
+    params.set(":timeout", kSolverTimeout);
     Z3_params_validate(context_, params, solver_params);
 
     solver_.set(params);
