@@ -448,7 +448,8 @@ void SeedSearcher::handleGetSeedFile(S2EExecutionState *state, S2E_SEEDSEARCHER_
             cmd.GetFile.Result = 0;
         } else {
             alreadyExplored = true;
-            cmd.GetFile.Result = 1;
+            // CvvT: Do not start seedless
+            cmd.GetFile.Result = 0;
         }
 
         getDebugStream(state) << "no seeds available\n";

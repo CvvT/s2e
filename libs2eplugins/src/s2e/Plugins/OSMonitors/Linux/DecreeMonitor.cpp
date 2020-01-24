@@ -307,7 +307,7 @@ void DecreeMonitor::handleReadDataPost(S2EExecutionState *state, uint64_t pid,
         plgState->m_totalReadBytesCount += d.buffer_size;
         onSymbolicRead.emit(state, pid, d.fd, d.buffer_size, data, ConstantExpr::create(d.buffer_size, Expr::Int32));
 
-        getDebugStream(state) << "handleReadData: readCount=" << plgState->m_readBytesCount[pid] << "\n";
+        getDebugStream(state) << "handleReadData Post: readCount=" << plgState->m_readBytesCount[pid] << "\n";
     }
 }
 
@@ -426,18 +426,21 @@ void DecreeMonitor::handleGetCfgBool(S2EExecutionState *state, uint64_t pid, S2E
 
     bool value;
     if (key == "invokeOriginalSyscalls") {
-        DECLARE_PLUGINSTATE(DecreeMonitorState, state);
+        // DECLARE_PLUGINSTATE(DecreeMonitorState, state);
 
         // We always want to invoke original syscalls when not in cb process
         // (e.g., when in seed process, which are also decree binaries).
         // XXX: this induces  a circular dependency between DecreeMonitor and
         // ProcessExecutionDetector. Better design would be to have a signal
         // to ask other plugins whether this process should be instrumented or not.
-        if (m_detector && !m_detector->isTracked(state, pid)) {
-            value = true;
-        } else {
-            value = plgState->m_invokeOriginalSyscalls;
-        }
+
+        // CvvT: always invoke original syscalls
+        // if (m_detector && !m_detector->isTracked(state, pid)) {
+        //     value = true;
+        // } else {
+        //     value = plgState->m_invokeOriginalSyscalls;
+        // }
+        value = true;
     } else {
         s2e_assert(state, false, "Unknown config key name: " << key);
     }
