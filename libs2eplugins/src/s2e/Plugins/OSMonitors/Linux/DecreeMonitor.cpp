@@ -292,7 +292,8 @@ void DecreeMonitor::handleReadDataPost(S2EExecutionState *state, uint64_t pid,
 
     DECLARE_PLUGINSTATE(DecreeMonitorState, state);
 
-    if (plgState->m_concolicMode) {
+    // CvvT: always in concolic mode
+    if (true) { // plgState->m_concolicMode) {
         std::vector<std::pair<std::vector<klee::ref<klee::Expr>>, std::string>> data;
 
         for (unsigned i = 0; i < d.buffer_size; i++) {
