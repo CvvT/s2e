@@ -1,8 +1,11 @@
 #! /bin/bash
 
-VERSION=4.9.3
-
 set -e
+
+VERSION=$1
+if [[ ! -f "patch-${VERSION}" ]]; then
+    echo "Do not support version ${VERSION}" && exit 1
+fi
 
 if [[ -z "${S2EDIR}" ]]; then
     echo "ENV variable S2EDIR is unset" && exit 1
