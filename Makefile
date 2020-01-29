@@ -33,7 +33,7 @@ RELEASE_BUILD_TYPE=RelWithDebInfo
 
 # corei7 avoids instructions not supported by VirtualBox. Use "native" instead
 # to optimize for your current CPU. Use x86-64 for minimum x64 support.
-BUILD_ARCH?=native
+BUILD_ARCH?=x86-64
 
 CFLAGS_ARCH:=-march=$(BUILD_ARCH)
 CXXFLAGS_ARCH:=-march=$(BUILD_ARCH)
