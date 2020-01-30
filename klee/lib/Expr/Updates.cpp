@@ -52,6 +52,8 @@ UpdateList::UpdateList(ArrayPtr _root, const UpdateNodePtr _head)
 
 void UpdateList::extend(const ref<Expr> &index, const ref<Expr> &value) {
     head = UpdateNode::create(head, index, value);
+    // CvvT: recompute the hash as we extend a new node.
+    computeHash();
 }
 
 int UpdateList::compare(const UpdateListPtr &b) const {
