@@ -101,7 +101,8 @@ CAPSTONE_SRC_DIR=capstone-$(CAPSTONE_VERSION)
 CAPSTONE_URL=https://github.com/aquynh/capstone/archive/$(CAPSTONE_SRC)
 
 # Z3 variables
-Z3_VERSION=4.7.1
+# Z3_VERSION=4.7.1
+Z3_VERSION=4.8.7
 Z3_SRC=z3-$(Z3_VERSION).tar.gz
 Z3_SRC_DIR=z3-z3-$(Z3_VERSION)
 Z3_BUILD_DIR=z3

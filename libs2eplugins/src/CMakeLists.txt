@@ -133,6 +133,7 @@ add_library(
     s2e/Plugins/Concolic/TraceMap.cpp
     s2e/Plugins/Concolic/Common.cpp
     s2e/Plugins/Concolic/xxhash/xxhash.cpp
+    s2e/Plugins/Concolic/Syscall.cpp
 
     ${PROTO_SRCS} ${PROTO_HDRS}
 )
