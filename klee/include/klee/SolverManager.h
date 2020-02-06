@@ -44,7 +44,7 @@ private:
 
     SolverManager(bool usePerStateSolvers);
 
-    std::shared_ptr<TimingSolver> createTimingSolver();
+    // std::shared_ptr<TimingSolver> createTimingSolver();
 
     void removeStateSolvers();
     std::shared_ptr<TimingSolver> _solver(const ExecutionState &state) const;
@@ -57,6 +57,7 @@ public:
         return get().mSolver;
     }
 
+    std::shared_ptr<TimingSolver> createTimingSolver();
     void createStateSolver(const ExecutionState &state);
     void removeState(const ExecutionState *state);
 
