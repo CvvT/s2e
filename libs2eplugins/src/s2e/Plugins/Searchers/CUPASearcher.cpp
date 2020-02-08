@@ -25,7 +25,7 @@
 namespace s2e {
 namespace plugins {
 
-S2E_DEFINE_PLUGIN(CUPASearcher, "CUPA searcher", "", "ModuleExecutionDetector", "MultiSearcher");
+S2E_DEFINE_PLUGIN(CUPASearcher, "CUPA searcher", "", "MultiSearcher");
 
 ///
 /// \brief Initializes the CUPA Searcher plugin
