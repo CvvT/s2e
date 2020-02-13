@@ -149,6 +149,7 @@ add_library(
     s2e/Plugins/Concolic/Common.cpp
     s2e/Plugins/Concolic/xxhash/xxhash.cpp
     s2e/Plugins/Concolic/Syscall.cpp
+    s2e/Plugins/Concolic/Disassembler.cpp
 
     ${PROTO_SRCS} ${PROTO_HDRS}
 )
