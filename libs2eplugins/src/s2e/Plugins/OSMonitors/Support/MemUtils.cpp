@@ -43,10 +43,20 @@ ref<Expr> MemUtils::read(S2EExecutionState *state, uint64_t addr, klee::Expr::Wi
     }
 
     // Try to read data from executable image
-    auto module = m_map->getModule(state, state->regs()->getPc());
+    // CvvT: First try to see if it is a global variable
+    auto module = m_map->getModule(state, addr);
+    if (!module) {
+        module = m_map->getModule(state, state->regs()->getPc());
+    }
+
     if (!module) {
         getDebugStream(state) << "no current module\n";
         return ref<Expr>(nullptr);
+    }
+    // CvvT: To native address??
+    uint64_t nativePc;
+    if (module->ToNativeBase(addr, nativePc)) {
+        addr = nativePc;
     }
 
     uintmax_t value = 0;
