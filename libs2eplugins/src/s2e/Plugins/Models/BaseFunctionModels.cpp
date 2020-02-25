@@ -204,7 +204,7 @@ bool BaseFunctionModels::strcmpHelperCommon(S2EExecutionState *state, const uint
     const Expr::Width width = state->getPointerSize() * CHAR_BIT;
     const ref<Expr> nullByteExpr = E_CONST('\0', Expr::Int8);
 
-    assert(width == Expr::Int32 && "-1 representation becomes wrong");
+    // assert(width == Expr::Int32 && "-1 representation becomes wrong");
     const ref<Expr> retZeroExpr = E_CONST(0, width);
 
     for (int nr = memSize - 1; nr >= 0; nr--) { // also compare null char
