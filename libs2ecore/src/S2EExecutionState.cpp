@@ -52,6 +52,16 @@ using namespace klee;
 
 unsigned S2EExecutionState::s_lastSymbolicId = 0;
 
+bool S2EExecutionState::addConstraint(const ref<Expr> &constraint, bool recomputeConcolics) {
+    // new feature: notify plugin a new constraint is going to be added, and ask if it's ok
+    bool ok = true;
+    g_s2e->getCorePlugin()->onConstraint.emit(this, constraint, &ok);
+    if (ok) {
+        return ExecutionState::addConstraint(constraint, recomputeConcolics);
+    }
+    return true;
+}
+
 S2EExecutionState::S2EExecutionState(klee::KFunction *kf)
     : klee::ExecutionState(kf), m_stateID(g_s2e->fetchAndIncrementStateId()), m_startSymbexAtPC((uint64_t) -1),
       m_active(true), m_zombie(false), m_yielded(false), m_runningConcrete(true), m_pinned(false),
