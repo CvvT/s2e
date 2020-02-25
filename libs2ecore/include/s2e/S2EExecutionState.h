@@ -409,6 +409,8 @@ public:
 
     void enumPossibleRanges(klee::ref<klee::Expr> e, klee::ref<klee::Expr> start, klee::ref<klee::Expr> end,
                             std::vector<klee::Range> &ranges);
+
+    virtual bool addConstraint(const klee::ref<klee::Expr> &e, bool recomputeConcolics = false) __attribute__((warn_unused_result));
 };
 } // namespace s2e
 
