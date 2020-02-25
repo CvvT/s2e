@@ -374,6 +374,11 @@ ref<Expr> BitfieldSimplifier::simplify(const ref<Expr> &e, uint64_t *knownZeroBi
         return e;
     }
 
+    // CvvT: FIXME
+    if (e->getWidth() > Expr::Int128) {
+        return e;
+    }
+
     ExprHashMap<ExprBitsInfo>::iterator it = m_simplifiedExpressions.find(e);
     if (it != m_simplifiedExpressions.end()) {
         ++m_cacheHits;
