@@ -143,6 +143,7 @@ add_library(
     s2e/Plugins/Profile/Instrumentor.cpp
     s2e/Plugins/Profile/LuaInterface.cpp
     s2e/Plugins/Profile/Serialize.cpp
+    s2e/Plugins/Profile/xxhash/xxhash.cpp
 
     ${PROTO_SRCS} ${PROTO_HDRS}
 )
