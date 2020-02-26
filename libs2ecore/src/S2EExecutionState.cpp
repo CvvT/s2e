@@ -707,12 +707,14 @@ void S2EExecutionState::addressSpaceChange(const klee::ObjectKey &key, const kle
                                            const klee::ObjectStatePtr &newState) {
     if (oldState && oldState->isMemoryPage()) {
         const auto &mo = oldState->getKey();
-        assert(newState->isMemoryPage());
+        // assert(newState->isMemoryPage());
         if ((mo.address & ~SE_RAM_OBJECT_MASK) == 0) {
             m_asCache.invalidate(mo.address & SE_RAM_OBJECT_MASK);
             m_tlb.addressSpaceChangeUpdateTlb(oldState, newState);
 #ifdef SE_ENABLE_PHYSRAM_TLB
-            m_tlb.updateRamTlb(oldState, newState);
+            if (newState) {
+                m_tlb.updateRamTlb(oldState, newState);
+            }
 #endif
         }
     } else {
