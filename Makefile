@@ -222,7 +222,7 @@ endif
 
 # Download Lua
 $(LUA_SRC):
-	wget http://www.lua.org/ftp/$(LUA_SRC)
+	wget https://www.lua.org/ftp/$(LUA_SRC)
 
 $(LUA_DIR): | $(LUA_SRC)
 	tar -zxf $(LUA_SRC)
