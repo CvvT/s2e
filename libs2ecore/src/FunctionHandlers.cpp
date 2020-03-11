@@ -49,7 +49,7 @@ void handleForkAndConcretize(Executor *executor, ExecutionState *state, klee::KI
 
     auto concreteAddress = state->toConstantSilent(address);
 
-    bool doConcretize = false;
+    bool doConcretize = true;
 
     CorePlugin::symbolicAddressReason reason;
     if (isTargetPc->isZero())
@@ -74,11 +74,12 @@ void handleForkAndConcretize(Executor *executor, ExecutionState *state, klee::KI
 
     klee::ref<klee::Expr> condition = EqExpr::create(concreteAddress, address);
 
-    if (doConcretize) {
-        if (!state->addConstraint(condition)) {
-            abort();
-        }
-        state->bindLocal(target, concreteAddress);
+    if (!doConcretize) {
+        // if (!state->addConstraint(condition)) {
+        //     abort();
+        // }
+        // state->bindLocal(target, concreteAddress);
+        state->bindLocal(target, castedAddress);
         return;
     }
 
