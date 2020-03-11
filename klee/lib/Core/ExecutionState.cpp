@@ -491,25 +491,25 @@ ref<ConstantExpr> ExecutionState::toConstant(ref<Expr> e, const std::string &rea
     assert(isa<ConstantExpr>(evalResult) && "Must be concrete");
     value = dyn_cast<ConstantExpr>(evalResult);
 
-    std::string s;
-    raw_string_ostream os(s);
+    // std::string s;
+    // raw_string_ostream os(s);
 
-    os << "silently concretizing ";
+    // os << "silently concretizing ";
 
-    const KInstruction *ki = prevPC;
-    if (ki && ki->inst) {
-        os << "(instruction: " << ki->inst->getParent()->getParent()->getName().str() << ": " << *ki->inst << ") ";
-    }
+    // const KInstruction *ki = prevPC;
+    // if (ki && ki->inst) {
+    //     os << "(instruction: " << ki->inst->getParent()->getParent()->getName().str() << ": " << *ki->inst << ") ";
+    // }
 
-    os << "(reason: " << reason << ") ";
+    // os << "(reason: " << reason << ") ";
 
-    if (PrintConcretizedExpression) {
-        os << " expression " << e;
-    }
+    // if (PrintConcretizedExpression) {
+    //     os << " expression " << e;
+    // }
 
-    os << " to value " << value;
+    // os << " to value " << value;
 
-    klee_warning_external(reason.c_str(), "%s", os.str().c_str());
+    // klee_warning_external(reason.c_str(), "%s", os.str().c_str());
 
     if (!addConstraint(EqExpr::create(e, value))) {
         abort();
