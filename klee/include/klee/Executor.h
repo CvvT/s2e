@@ -247,6 +247,8 @@ public:
 
     virtual void terminateState(ExecutionState &state, const std::string &reason);
 
+    virtual void clearStates(ExecutionState &state) = 0;
+
     // XXX should just be moved out to utility module
     ref<klee::ConstantExpr> evalConstant(const llvm::Constant *c, const KInstruction *ki = nullptr);
 
