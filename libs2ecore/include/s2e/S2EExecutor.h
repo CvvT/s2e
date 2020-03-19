@@ -173,6 +173,8 @@ public:
     /** Kills the specified state and raises an exception to exit the cpu loop */
     virtual void terminateState(klee::ExecutionState &state, const std::string &message);
 
+    virtual void clearStates(klee::ExecutionState &state);
+
     void resetStateSwitchTimer();
 
     // Should be public because of manual forks in plugins

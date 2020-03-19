@@ -1675,6 +1675,18 @@ void S2EExecutor::terminateState(ExecutionState &s) {
     }
 }
 
+void S2EExecutor::clearStates(klee::ExecutionState &curState) {
+    // TODO: remove AddStates
+    S2EExecutionState *s2estate = static_cast<S2EExecutionState *>(&curState);
+    unsigned tgt = s2estate->getID();
+    for (auto state : states) {
+        S2EExecutionState *s = static_cast<S2EExecutionState *>(state);
+        unsigned id = s->getID();
+        if (id != 0 && id != tgt)
+            terminateState(*state, "clear states");
+    }
+}
+
 inline void S2EExecutor::setCCOpEflags(S2EExecutionState *state) {
     uint32_t cc_op = 0;
 
