@@ -95,6 +95,8 @@ cl::opt<bool> EmitAllErrors("emit-all-errors", cl::init(false),
                                      "(default=one per (error,instruction) pair)"));
 
 cl::opt<bool> NoExternals("no-externals", cl::desc("Do not allow external functin calls"));
+
+cl::opt<bool> ForceFork("force-fork", cl::init(true), cl::desc("Force to fork"));
 } // namespace
 
 namespace klee {
@@ -407,19 +409,46 @@ Executor::StatePair Executor::fork(ExecutionState &current, const ref<Expr> &con
 
     // Build constraints for branched state
     ConstraintManager tmpConstraints = current.constraints();
+    ref<Expr> toAddExpr = condition;
     if (conditionIsTrue) {
-        tmpConstraints.addConstraint(Expr::createIsZero(condition));
-    } else {
-        tmpConstraints.addConstraint(condition);
+        toAddExpr = Expr::createIsZero(condition);
     }
+    tmpConstraints.addConstraint(toAddExpr);
 
     std::vector<std::vector<unsigned char>> concreteObjects;
     auto solver = SolverManager::solver(current);
+    bool succeed = false;
     if (!solver->getInitialValues(tmpConstraints, symbObjects, concreteObjects, current.queryCost)) {
-        if (conditionIsTrue) {
-            return StatePair(&current, 0);
-        } else {
-            return StatePair(0, &current);
+        if (ForceFork) {
+            ConstraintManager newConstraints;
+            newConstraints.addConstraint(toAddExpr);
+            succeed = solver->getInitialValues(newConstraints, symbObjects, concreteObjects, current.queryCost);
+        }
+
+        if (!succeed) {
+            if (conditionIsTrue) {
+                return StatePair(&current, 0);
+            } else {
+                return StatePair(0, &current);
+            }
+        }
+    }
+
+    if (ForceFork) { // current.fakeState) {
+        // Double check
+        Assignment assignment;
+        for (unsigned i = 0; i < symbObjects.size(); ++i) {
+            assignment.add(symbObjects[i], concreteObjects[i]);
+        }
+        auto evaluated = assignment.evaluate(toAddExpr);
+        ConstantExpr *ce = dyn_cast<ConstantExpr>(evaluated);
+        if (!ce) {
+            terminateState(current, "Failed to evaluate expr");
+            // if (conditionIsTrue) {
+            //     return StatePair(&current, 0);
+            // } else {
+            //     return StatePair(0, &current);
+            // }
         }
     }
 
@@ -428,6 +457,11 @@ Executor::StatePair Executor::fork(ExecutionState &current, const ref<Expr> &con
     notifyBranch(current);
     branchedState = current.branch();
     addedStates.insert(branchedState);
+
+    if (succeed) {
+        branchedState->clearConstraint();
+        branchedState->fakeState = true;
+    }
 
     // Update concrete values for the branched state
     branchedState->concolics->clear();

@@ -153,6 +153,11 @@ public:
         return head_ == other.head_;
     }
 
+    void clear() {
+        root_ = ConditionNodeRef(new ConditionNode());
+        head_ = root_;
+    }
+
     void addConstraint(const ref<Expr> e);
 
     const_iterator begin() const {
