@@ -159,6 +159,10 @@ public:
     ///
     virtual bool addConstraint(const ref<Expr> &e, bool recomputeConcolics = false) __attribute__((warn_unused_result));
 
+    void clearConstraint() {
+        m_constraints.clear();
+    }
+
     ///
     /// \brief Compute a set of concrete inputs for the given constraints
     /// \param mgr the constraints
