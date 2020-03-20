@@ -434,7 +434,7 @@ Executor::StatePair Executor::fork(ExecutionState &current, const ref<Expr> &con
         }
     }
 
-    if (ForceFork) { // current.fakeState) {
+    if (ForceFork) {
         // Double check
         Assignment assignment;
         for (unsigned i = 0; i < symbObjects.size(); ++i) {
@@ -444,11 +444,6 @@ Executor::StatePair Executor::fork(ExecutionState &current, const ref<Expr> &con
         ConstantExpr *ce = dyn_cast<ConstantExpr>(evaluated);
         if (!ce) {
             terminateState(current, "Failed to evaluate expr");
-            // if (conditionIsTrue) {
-            //     return StatePair(&current, 0);
-            // } else {
-            //     return StatePair(0, &current);
-            // }
         }
     }
 
@@ -472,17 +467,25 @@ Executor::StatePair Executor::fork(ExecutionState &current, const ref<Expr> &con
     // Add constraint to both states
     if (conditionIsTrue) {
         if (!current.addConstraint(condition)) {
-            abort();
+            // abort();
+            terminateState(*branchedState, "[M] Fail to add constraint");
+            terminateState(current, "[M] Fail to add constraint");
         }
         if (!branchedState->addConstraint(Expr::createIsZero(condition))) {
-            abort();
+            // abort();
+            terminateState(*branchedState, "Fail to add constraint");
+            return StatePair(&current, 0);
         }
     } else {
         if (!current.addConstraint(Expr::createIsZero(condition))) {
-            abort();
+            // abort();
+            terminateState(*branchedState, "[M] Fail to add constraint");
+            terminateState(current, "[M] Fail to add constraint");
         }
         if (!branchedState->addConstraint(condition)) {
-            abort();
+            // abort();
+            terminateState(*branchedState, "Failed to add constraint");
+            return StatePair(0, &current);
         }
     }
 
