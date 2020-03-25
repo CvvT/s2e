@@ -69,7 +69,7 @@ endif
 LLVM_VERSION=9.0.0
 LLVM_SRC=llvm-$(LLVM_VERSION).src.tar.xz
 LLVM_SRC_DIR=llvm-$(LLVM_VERSION).src
-LLVM_SRC_URL=http://releases.llvm.org/$(LLVM_VERSION)/
+LLVM_SRC_URL=https://releases.llvm.org/$(LLVM_VERSION)/
 
 # The Python script should only return a single word - the suffix of the Clang
 # binary to download. If an error message is printed to stderr, the Makefile
@@ -100,8 +100,7 @@ CAPSTONE_SRC_DIR=capstone-$(CAPSTONE_VERSION)
 CAPSTONE_URL=https://github.com/aquynh/capstone/archive/$(CAPSTONE_SRC)
 
 # Z3 variables
-# Z3_VERSION=4.7.1
-Z3_VERSION=4.8.7
+Z3_VERSION=4.7.1
 Z3_SRC=z3-$(Z3_VERSION).tar.gz
 Z3_SRC_DIR=z3-z3-$(Z3_VERSION)
 Z3_BUILD_DIR=z3
