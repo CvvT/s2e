@@ -1591,7 +1591,7 @@ diff -ru linux-4.9.3/mm/util.c s2e-linux-kernel/linux-4.9.3/mm/util.c
  	}
 +
 +#ifdef CONFIG_S2E
-+	if (s2e_linux_monitor_enabled && (ret != -1)) {
++	if (s2e_linux_monitor_enabled && !IS_ERR(ret)) {
 +		s2e_linux_mmap(current->pid, ret, len, prot, flag, pgoff);
 +	}
 +#endif
