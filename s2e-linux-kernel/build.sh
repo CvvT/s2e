@@ -46,13 +46,15 @@ export S2E_MAX_PROCESSES=1
 export S2E_UNBUFFERED_STREAM=1
 
 GRAPHICS=-nographic
+# comment out the following line if running in a virtual machine.
+KVM=-enable-kvm
 DRIVE="-drive file=$S2EDIR/images/debian-9.2.1-x86_64-${VERSION}/image.raw.s2e,format=raw,cache=writeback"
 QEMU="$S2EDIR/install/bin/qemu-system-x86_64"
 LIBS2E="$S2EDIR/install/share/libs2e/libs2e-x86_64.so"
 NET="-net none -net nic,model=e1000"
 
 sudo $QEMU $DRIVE \
-    -k en-us $GRAPHICS -monitor null -m 4096M -enable-kvm \
+    -k en-us $GRAPHICS -monitor null -m 4096M $KVM \
     -serial file:serial.txt $NET -no-reboot
 
 echo "Successfully install debs"
@@ -64,7 +66,7 @@ sudo virt-copy-in -a ${S2EDIR}/images/debian-9.2.1-x86_64-${VERSION}/image.raw.s
 # Take a new snapshot
 DRIVE="-drive file=$S2EDIR/images/debian-9.2.1-x86_64-${VERSION}/image.raw.s2e,format=s2e,cache=writeback"
 LD_PRELOAD=$LIBS2E $QEMU $DRIVE \
-    -k en-us $GRAPHICS -monitor null -m 1024M -enable-kvm \
+    -k en-us $GRAPHICS -monitor null -m 1024M $KVM \
     -serial file:serial_ready.txt $NET -enable-serial-commands
 
 echo "Successfully take a snapshot!"
