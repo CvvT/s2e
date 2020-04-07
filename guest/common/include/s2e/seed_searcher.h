@@ -41,7 +41,7 @@ static int s2e_seed_get_file(char *file, size_t bytes, int *should_fork) {
 
     s2e_begin_atomic();
     s2e_disable_all_apic_interrupts();
-    s2e_invoke_plugin("SeedSearcher", &cmd, sizeof(cmd));
+    s2e_invoke_plugin("HybridSearcher", &cmd, sizeof(cmd));
     s2e_enable_all_apic_interrupts();
     s2e_end_atomic();
 
@@ -77,7 +77,7 @@ static void s2e_seed_searcher_enable(void) {
 
     s2e_begin_atomic();
     s2e_disable_all_apic_interrupts();
-    s2e_invoke_plugin("SeedSearcher", &cmd, sizeof(cmd));
+    s2e_invoke_plugin("HybridSearcher", &cmd, sizeof(cmd));
     s2e_enable_all_apic_interrupts();
     s2e_end_atomic();
 }

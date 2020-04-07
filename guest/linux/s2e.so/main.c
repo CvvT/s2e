@@ -66,7 +66,7 @@ static void __emit_error(const char *msg) {
 static void initialize_cmdline(int argc, char **argv) {
     char *sym_args = getenv("S2E_SYM_ARGS");
     if (!sym_args) {
-        s2e_warning("S2E_SYM_ARGS is not set. All arguments will be concrete");
+        // s2e_warning("S2E_SYM_ARGS is not set. All arguments will be concrete");
         return;
     }
 
@@ -133,6 +133,8 @@ int __libc_start_main(int *(main)(int, char **, char **), int argc, char **ubp_a
     s2e_load_modules_from_procmap();
 
     initialize_cmdline(argc, ubp_av);
+
+    initialize_seed();
 
     g_enable_function_models = s2e_plugin_loaded("FunctionModels");
 

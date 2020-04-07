@@ -35,4 +35,6 @@
 // Declare external global functions
 extern uint8_t g_enable_function_models;
 
+void initialize_seed();
+
 #endif

@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 
-add_library(s2e SHARED main.c s2e.c elf.c procmap.c modules.c s2e.c
+add_library(s2e SHARED main.c s2e.c elf.c procmap.c modules.c s2e.c util.c
                        ../function_models/libc_wrapper.c
                        ../function_models/libz_wrapper.c
                        ../function_models/models.c)
