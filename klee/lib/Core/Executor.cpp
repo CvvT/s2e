@@ -104,6 +104,46 @@ RNG theRNG;
 extern cl::opt<bool> UseExprSimplifier;
 } // namespace klee
 
+static void addDivConstraint(ConstraintManager &manager, ref<Expr> expr, unsigned depth) {
+    static std::set<unsigned> visited;
+    if (depth == 0)
+        visited.clear();
+    unsigned hash = expr->hash();
+    if (visited.find(hash) != visited.end())
+        return;
+    visited.insert(hash);
+
+    switch (expr->getKind()) {
+    case Expr::UDiv:
+    case Expr::SDiv:
+    case Expr::URem:
+    case Expr::SRem: {
+        addDivConstraint(manager, expr->getKid(0), depth+1);
+        auto isZero = Expr::createIsZero(expr->getKid(1));
+        manager.addConstraint(Expr::createIsZero(isZero));
+        addDivConstraint(manager, expr->getKid(1), depth+1);
+    }
+        break;
+    case Expr::Constant:
+        break;
+    case Expr::Read:
+        if (ReadExpr *read = dyn_cast<ReadExpr>(expr)) {
+            addDivConstraint(manager, read->getIndex(), depth+1);
+            auto updates = read->getUpdates();
+            for (auto un = updates->getHead(); un; un = un->getNext()) {
+                addDivConstraint(manager, un->getIndex(), depth+1);
+                addDivConstraint(manager, un->getValue(), depth+1);
+            }
+        }
+        break;
+    default:
+        for (unsigned i = 0; i < expr->getNumKids(); i++) {
+            addDivConstraint(manager, expr->getKid(i), depth+1);
+        }
+        break;
+    }
+}
+
 Executor::Executor(InterpreterHandler *ih, LLVMContext &context)
     : kmodule(0), interpreterHandler(ih), searcher(0), externalDispatcher(new ExternalDispatcher()), statsTracker(0),
       specialFunctionHandler(0) {
@@ -419,8 +459,12 @@ Executor::StatePair Executor::fork(ExecutionState &current, const ref<Expr> &con
     auto solver = SolverManager::solver(current);
     bool succeed = false;
     if (!solver->getInitialValues(tmpConstraints, symbObjects, concreteObjects, current.queryCost)) {
-        if (ForceFork) {
+        if (ForceFork && !current.fakeState) {
             ConstraintManager newConstraints;
+            // Add div constraints back
+            // for (auto expr : current.constraints()) {
+            //     addDivConstraint(newConstraints, expr, 0);
+            // }
             newConstraints.addConstraint(toAddExpr);
             succeed = solver->getInitialValues(newConstraints, symbObjects, concreteObjects, current.queryCost);
         }
@@ -443,6 +487,15 @@ Executor::StatePair Executor::fork(ExecutionState &current, const ref<Expr> &con
         auto evaluated = assignment.evaluate(toAddExpr);
         ConstantExpr *ce = dyn_cast<ConstantExpr>(evaluated);
         if (!ce) {
+            std::string s;
+            raw_string_ostream os(s);
+            os << "Before " << toAddExpr;
+            klee_warning("%s", os.str().c_str());
+
+            std::string s2;
+            raw_string_ostream os2(s2);
+            os2 << "After " << evaluated;
+            klee_warning("%s", os2.str().c_str());
             terminateState(current, "Failed to evaluate expr");
         }
     }
@@ -500,6 +553,17 @@ Executor::StatePair Executor::fork(ExecutionState &current, const ref<Expr> &con
     }
 
     return StatePair(trueState, falseState);
+}
+
+Executor::StatePair Executor::fork(ExecutionState &current) {
+    // Branch
+    ExecutionState *branchedState;
+    notifyBranch(current);
+    branchedState = current.branch();
+    addedStates.insert(branchedState);
+
+    current.pc = current.prevPC;
+    return StatePair(&current, branchedState);
 }
 
 void Executor::notifyFork(ExecutionState &originalState, ref<Expr> &condition, Executor::StatePair &targets) {

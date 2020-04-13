@@ -241,13 +241,12 @@ public:
     // NOTE: In concolic mode it will recompute initial values for current state, do not use it for seed state.
     virtual StatePair fork(ExecutionState &current, const ref<Expr> &condition,
                            bool keepConditionTrueInCurrentState = false);
+    virtual StatePair fork(ExecutionState &current);
 
     // remove state from queue and delete
     virtual void terminateState(ExecutionState &state);
 
     virtual void terminateState(ExecutionState &state, const std::string &reason);
-
-    virtual void clearStates(ExecutionState &state) = 0;
 
     // XXX should just be moved out to utility module
     ref<klee::ConstantExpr> evalConstant(const llvm::Constant *c, const KInstruction *ki = nullptr);

@@ -147,6 +147,7 @@ public:
         searcher = s;
     }
 
+    StatePair forkNone(S2EExecutionState *state);
     StatePair forkCondition(S2EExecutionState *state, klee::ref<klee::Expr> condition,
                             bool keepConditionTrueInCurrentState = false);
 
@@ -172,8 +173,6 @@ public:
 
     /** Kills the specified state and raises an exception to exit the cpu loop */
     virtual void terminateState(klee::ExecutionState &state, const std::string &message);
-
-    virtual void clearStates(klee::ExecutionState &state);
 
     void resetStateSwitchTimer();
 

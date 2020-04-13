@@ -140,17 +140,15 @@ add_library(
 
     # Fuzzing
     s2e/Plugins/Concolic/HybridEngine.cpp
-    s2e/Plugins/Concolic/TraceEngine.cpp
     s2e/Plugins/Concolic/QSYMEngine.cpp
     s2e/Plugins/Concolic/DrillerEngine.cpp
-    s2e/Plugins/Concolic/SymEngine.cpp
     s2e/Plugins/Concolic/AFLEngine.cpp
     s2e/Plugins/Concolic/TraceMap.cpp
     s2e/Plugins/Concolic/Common.cpp
     s2e/Plugins/Concolic/xxhash/xxhash.cpp
     s2e/Plugins/Concolic/Syscall.cpp
     s2e/Plugins/Concolic/Disassembler.cpp
-    s2e/Plugins/Concolic/MultiSearchEngine.cpp
+    s2e/Plugins/Concolic/HybridScheduler.cpp
     s2e/Plugins/Concolic/Simple.cpp
 
     ${PROTO_SRCS} ${PROTO_HDRS}

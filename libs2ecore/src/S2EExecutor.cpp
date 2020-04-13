@@ -1483,6 +1483,20 @@ S2EExecutor::StatePair S2EExecutor::fork(ExecutionState &current, const klee::re
     return res;
 }
 
+S2EExecutor::StatePair S2EExecutor::forkNone(S2EExecutionState *state) {
+    assert(state);
+    assert(!state->isRunningConcrete());
+
+    S2EExecutor::StatePair sp = Executor::fork(*state);
+    S2EExecutionState *branch = static_cast<S2EExecutionState *>(sp.second);
+    branch->m_needFinalizeTBExec = true;
+    branch->m_active = false;
+
+    klee::ref<klee::Expr> condition = klee::ConstantExpr::create(1, Expr::Bool);
+    notifyFork(*state, condition, sp);
+    return sp;
+}
+
 /// \brief Fork state
 ///
 /// Fork current state and return states in which condition
@@ -1672,18 +1686,6 @@ void S2EExecutor::terminateState(ExecutionState &s) {
     if (!m_inLoadBalancing && (&state == g_s2e_state)) {
         state.regs()->write<int>(CPU_OFFSET(exception_index), EXCP_SE);
         throw CpuExitException();
-    }
-}
-
-void S2EExecutor::clearStates(klee::ExecutionState &curState) {
-    // TODO: remove AddStates
-    S2EExecutionState *s2estate = static_cast<S2EExecutionState *>(&curState);
-    unsigned tgt = s2estate->getID();
-    for (auto state : states) {
-        S2EExecutionState *s = static_cast<S2EExecutionState *>(state);
-        unsigned id = s->getID();
-        if (id != 0 && id != tgt)
-            terminateState(*state, "clear states");
     }
 }
 

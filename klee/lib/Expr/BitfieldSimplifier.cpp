@@ -87,7 +87,7 @@ cl::opt<bool> PrintSimplifier("print-expr-simplifier", cl::init(false));
 
 ref<Expr> BitfieldSimplifier::replaceWithConstant(const ref<Expr> &e, __uint128_t value) {
     ConstantExpr *ce = dyn_cast<ConstantExpr>(e);
-    if (ce && ce->getZExtValue(128) == value) {
+    if (ce && ce->getZExtValue128() == value) {
         return e;
     }
 
