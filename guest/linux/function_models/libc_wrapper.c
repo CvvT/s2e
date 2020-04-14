@@ -24,6 +24,8 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include <s2e/s2e.h>
+
 #include "function_models.h"
 #include "s2e_so.h"
 
@@ -96,3 +98,13 @@ int fprintf(FILE *stream, const char *format, ...) {
 
     return done;
 }
+
+char *strdup(const char *s) {
+    if (!orig_strdup) {
+        initialize_models();
+    }
+    char *ret = orig_strdup(s);
+    s2e_concretize(&ret, sizeof(char*));
+    return ret;
+}
+

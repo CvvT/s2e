@@ -43,6 +43,7 @@ T_printf orig_printf = NULL;
 T_fprintf orig_fprintf = NULL;
 T_strcat orig_strcat = NULL;
 T_strncat orig_strncat = NULL;
+T_strdup orig_strdup = NULL;
 
 T_crc32 orig_crc32 = NULL;
 T_crc16 orig_crc16 = NULL;
@@ -60,6 +61,7 @@ void initialize_models() {
     orig_fprintf = (T_fprintf) dlsym(RTLD_NEXT, "fprintf");
     orig_strcat = (T_strcat) dlsym(RTLD_NEXT, "strcat");
     orig_strncat = (T_strncat) dlsym(RTLD_NEXT, "strncat");
+    orig_strdup = (T_strdup) dlsym(RTLD_NEXT, "strdup");
 
     orig_crc32 = (T_crc32) dlsym(RTLD_NEXT, "crc32");
     orig_crc16 = (T_crc16) dlsym(RTLD_NEXT, "crc16");

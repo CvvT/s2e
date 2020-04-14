@@ -56,6 +56,8 @@ typedef char *(*T_strncat)(char *dest, const char *src, size_t n);
 typedef uint32_t (*T_crc32)(uint32_t crc, const uint8_t *buf, unsigned len);
 typedef uint16_t (*T_crc16)(uint16_t crc, const uint8_t *buf, unsigned len);
 
+typedef char *(*T_strdup)(const char *s);
+
 //
 // Pointers to copies of modelled functions
 //
@@ -70,6 +72,7 @@ extern T_printf orig_printf;
 extern T_fprintf orig_fprintf;
 extern T_strcat orig_strcat;
 extern T_strncat orig_strncat;
+extern T_strdup orig_strdup;
 
 extern T_crc32 orig_crc32;
 extern T_crc16 orig_crc16;
